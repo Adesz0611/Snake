@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Snake.Program;
 
 namespace Snake
 {
@@ -43,7 +44,7 @@ namespace Snake
             }
         }
 
-        public void input()
+        public State input()
         {
             var inputKey = Console.ReadKey(true).Key;
             switch (inputKey)
@@ -58,17 +59,16 @@ namespace Snake
                     switch (highlighted)
                     {
                         case 0: // "Játék"
-                            break;
+                            return State.GAME;
                         case 1: // "Eredmények"
-                            break;
+                            return State.RESULT;
                         case 2: // "Kilépés"
                             Environment.Exit(0);
                             break;
                     }
                     break;
-                default:
-                    break;
             }
+            return State.DEFAULT;
         }
     }
 }

@@ -1,17 +1,21 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static Snake.Program;
 
 namespace Snake
 {
     class Snake
     {
-        private struct pos {
+        public struct pos {
             public int x, y;
         }
+        private pos last;
+        private int score;
 
         private enum Direction {
             UP,
@@ -22,7 +26,7 @@ namespace Snake
 
         private Direction dir;
 
-        private pos makePos(int x, int y) {
+        public static pos makePos(int x, int y) {
             pos tmp;
             tmp.x = x;
             tmp.y = y;
@@ -33,13 +37,18 @@ namespace Snake
 
 
         public Snake() {
+            reset();
+        }
+
+        public void reset() {
+            snake.Clear();
             snake.Add(makePos(9, 3));
             snake.Add(makePos(8, 3));
-            snake.Add(makePos(7, 3));
+            /*snake.Add(makePos(7, 3));
             snake.Add(makePos(6, 3));
             snake.Add(makePos(5, 3));
             snake.Add(makePos(4, 3));
-            snake.Add(makePos(3, 3));
+            snake.Add(makePos(3, 3));*/
             dir = Direction.RIGHT;
         }
 
@@ -54,14 +63,9 @@ namespace Snake
         }
 
         public void input() {
+            deleteOldSnake();
 
-            // Kitöröljük a régi kígyót
-            // TODO: Külön függvénybe tenni
-            for (int i = 0; i < snake.Count; i++)
-            {
-                Console.SetCursorPosition(snake[i].x, snake[i].y);
-                Console.Write(" ");
-            }
+            last = snake[snake.Count - 1];
 
             if (Console.KeyAvailable) {
                 var inputKey = Console.ReadKey(true).Key;
@@ -81,7 +85,7 @@ namespace Snake
                 }
             }
 
-            pos prev = makePos(0,0);
+            pos prev = makePos(0, 0);
             switch (dir) {
                 case Direction.UP:
                     prev = makePos(snake[0].x, snake[0].y - 1);
@@ -96,13 +100,60 @@ namespace Snake
                     prev = makePos(snake[0].x + 1, snake[0].y);
                     break;
             }
-            
+
             for (int i = 0; i < snake.Count; i++)
             {
                 // TODO: biztos van jobb megoldás, de amikor ezt írtam, akkor agyhalott voltam
                 pos asd = snake[i];
                 snake[i] = prev;
                 prev = asd;
+            }
+            last = snake[snake.Count - 1];
+        }
+
+        private void deleteOldSnake() {
+            // Kitöröljük a régi kígyót
+            for (int i = 0; i < snake.Count; i++)
+            {
+                Console.SetCursorPosition(snake[i].x, snake[i].y);
+                Console.Write(" ");
+            }
+        }
+
+        public bool checkSelfCollide() {
+            for (int i = 1; i < snake.Count; i++) {
+                if (snake[i].x == snake[0].x && snake[i].y == snake[0].y) {
+                    saveScore();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool checkWallCollide() {
+            if (snake[0].x > 118 || snake[0].x < 1 || snake[0].y < 0 || snake[0].y > 34) {
+                saveScore();
+                return true;
+            }
+            return false;
+        }
+
+        public void saveScore() {
+            int currentMax = loadScore();
+            FileStream f = new FileStream("score.txt", FileMode.Create);
+            StreamWriter sw = new StreamWriter(f);
+
+            sw.Write(Math.Max(score, currentMax));
+
+            sw.Close();
+            f.Close();
+        }
+
+        public void eatFood(Food p_f) {
+            if (snake[0].x == p_f.food.x && snake[0].y == p_f.food.y) {
+                score += 10;
+                snake.Add(last);
+                p_f.generateFoodPos();
             }
         }
     }

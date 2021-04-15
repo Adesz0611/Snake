@@ -10,31 +10,24 @@ namespace Snake
     {
         public void DrawBorders()
         {
+            Console.BackgroundColor = ConsoleColor.Green;
             // Először a felső és alsó sávot rajzoljuk ki
-            for (int i = 2; i < 118; i++) {
+            for (int i = 1; i < 119; i++) {
                 Console.SetCursorPosition(i, 0);
-                Console.Write("━");
+                Console.Write(" ");
                 Console.SetCursorPosition(i, 34);
-                Console.Write("━");
+                Console.Write(" ");
             }
 
             // Utána a két oldasávot
-            for (int i = 1; i < 34; i++) {
+            for (int i = 0; i < 35; i++) {
                 Console.SetCursorPosition(1, i);
-                Console.Write("┃");
+                Console.Write(" ");
                 Console.SetCursorPosition(118, i);
-                Console.Write("┃");
+                Console.Write(" ");
             }
 
-            // Majd a sarkokat
-            Console.SetCursorPosition(1, 0);
-            Console.Write("┏");
-            Console.SetCursorPosition(118, 0);
-            Console.Write("┓");
-            Console.SetCursorPosition(1, 34);
-            Console.Write("┗");
-            Console.SetCursorPosition(118, 34);
-            Console.Write("┛");
+            Console.BackgroundColor = ConsoleColor.Black;
         }
     }
 }

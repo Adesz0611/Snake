@@ -131,7 +131,7 @@ namespace Snake
         }
 
         public bool checkWallCollide() {
-            if (snake[0].x > 118 || snake[0].x < 1 || snake[0].y < 0 || snake[0].y > 34) {
+            if (snake[0].x > 117 || snake[0].x < 2 || snake[0].y < 1 || snake[0].y > 33) {
                 saveScore();
                 return true;
             }

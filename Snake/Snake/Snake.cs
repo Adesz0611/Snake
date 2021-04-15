@@ -50,6 +50,7 @@ namespace Snake
             snake.Add(makePos(4, 3));
             snake.Add(makePos(3, 3));*/
             dir = Direction.RIGHT;
+            score = 0;
         }
 
         public void draw() {

@@ -19,13 +19,16 @@ namespace Snake
         }
 
         public static int loadScore() {
-            FileStream f = new FileStream("score.txt", FileMode.Open);
-            StreamReader sr = new StreamReader(f);
+            int score = 0;
+            if (File.Exists("score.txt")) {
+                FileStream f = new FileStream("score.txt", FileMode.Open);
+                StreamReader sr = new StreamReader(f);
 
-            int score = int.Parse(sr.ReadLine());
+                score = int.Parse(sr.ReadLine());
 
-            sr.Close();
-            f.Close();
+                sr.Close();
+                f.Close();
+            }
 
             return score;
         }

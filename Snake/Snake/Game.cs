@@ -15,12 +15,12 @@ namespace Snake
             for (int i = 1; i < 119; i++) {
                 Console.SetCursorPosition(i, 0);
                 Console.Write(" ");
-                Console.SetCursorPosition(i, 34);
+                Console.SetCursorPosition(i, 31);
                 Console.Write(" ");
             }
 
             // Utána a két oldasávot
-            for (int i = 0; i < 35; i++) {
+            for (int i = 0; i < 32; i++) {
                 Console.SetCursorPosition(1, i);
                 Console.Write(" ");
                 Console.SetCursorPosition(118, i);

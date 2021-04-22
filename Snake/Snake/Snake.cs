@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static Snake.Program;
+using static Snake.Score;
 
 namespace Snake
 {
@@ -121,38 +121,39 @@ namespace Snake
             }
         }
 
-        public bool checkSelfCollide() {
+        public bool checkSelfCollide(Score p_s) {
             for (int i = 1; i < snake.Count; i++) {
                 if (snake[i].x == snake[0].x && snake[i].y == snake[0].y) {
-                    saveScore();
+                    p_s.SaveScore();
                     return true;
                 }
             }
             return false;
         }
 
-        public bool checkWallCollide() {
-            if (snake[0].x > 117 || snake[0].x < 2 || snake[0].y < 1 || snake[0].y > 33) {
-                saveScore();
+        public bool checkWallCollide(Score p_s) {
+            if (snake[0].x > 117 || snake[0].x < 2 || snake[0].y < 1 || snake[0].y > 30) {
+                p_s.SaveScore();
                 return true;
             }
             return false;
         }
 
+        /*
         public void saveScore() {
-            int currentMax = loadScore();
+            UInt64 currentMax = LoadScore();
             FileStream f = new FileStream("score.txt", FileMode.Create);
             StreamWriter sw = new StreamWriter(f);
 
-            sw.Write(Math.Max(score, currentMax));
+            sw.Write(Math.Max(GetScore(), currentMax));
 
             sw.Close();
             f.Close();
-        }
+        }*/
 
-        public void eatFood(Food p_f) {
+        public void eatFood(Food p_f, Score p_s) {
             if (snake[0].x == p_f.food.x && snake[0].y == p_f.food.y) {
-                score += 10;
+                p_s.AddToScore(10);
                 snake.Add(last);
                 do
                 {

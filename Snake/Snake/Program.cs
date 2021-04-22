@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static Snake.Score;
 
 namespace Snake
 {
@@ -18,21 +19,6 @@ namespace Snake
             DEFAULT
         }
 
-        public static int loadScore() {
-            int score = 0;
-            if (File.Exists("score.txt")) {
-                FileStream f = new FileStream("score.txt", FileMode.Open);
-                StreamReader sr = new StreamReader(f);
-
-                score = int.Parse(sr.ReadLine());
-
-                sr.Close();
-                f.Close();
-            }
-
-            return score;
-        }
-
         static void Main(string[] args)
         {
             // Engedélyezzük az UTF-8-as karakterek kiíratását a konzolban
@@ -44,6 +30,7 @@ namespace Snake
             Snake snake = new Snake();
             Food food = new Food();
             Game game = new Game();
+            Score score = new Score();
 
             State state = State.MENU;
             menu.DrawLogo();
@@ -57,6 +44,8 @@ namespace Snake
                             game.DrawBorders();
                             //snake.draw();
                             snake.reset();
+                            score.Reset();
+                            score.printScoreLabel();
                             state = State.GAME;
                             break;
                         case State.RESULT:
@@ -66,9 +55,10 @@ namespace Snake
                 }
                 while (state == State.GAME) {
                     food.draw();
+                    score.printScore();
                     snake.input();
-                    snake.eatFood(food);
-                    if (snake.checkWallCollide() || snake.checkSelfCollide()) {
+                    snake.eatFood(food, score);
+                    if (snake.checkWallCollide(score) || snake.checkSelfCollide(score)) {
                         Console.Clear();
                         menu.DrawLogo();
                         state = State.MENU;
@@ -81,7 +71,7 @@ namespace Snake
                 while (state == State.RESULT) {
                     Console.Clear();
                     Console.SetCursorPosition(2, 2);
-                    Console.WriteLine("A legnagyobb elért pontszám: " + loadScore());
+                    Console.WriteLine("A legnagyobb elért pontszám: " + LoadScore());
                     Console.SetCursorPosition(2, 5);
                     Console.WriteLine("Nyomjon meg egy gombot a menübe való visszalépéshez...");
                     Console.ReadKey();

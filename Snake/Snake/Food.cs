@@ -17,7 +17,7 @@ namespace Snake
         }
 
         public void generateFoodPos() {
-            food = makePos(r.Next(2, 118), r.Next(1, 34));
+            food = makePos(r.Next(2, 118), r.Next(1, 31));
         }
 
         public void draw() {

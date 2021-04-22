@@ -31,6 +31,11 @@ namespace Snake
             Food food = new Food();
             Game game = new Game();
             Score score = new Score();
+            Config config = new Config();
+
+            config.Print();
+            Console.ReadKey(true);
+            Environment.Exit(0);
 
             State state = State.MENU;
             menu.DrawLogo();

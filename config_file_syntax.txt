@@ -1,0 +1,29 @@
+Config file syntax:
+===================
+
+KÍGYÓ:
+======
+
+# Kígyó gyorsasága millisecben (ms)
+snake_speed: [szám]
+
+# Ha a kígyó nekimegy a falnak, akkor meghaljon-e vagy tovább menjen
+snake_dieOnWallColl: [logikai érték]
+
+EREDMÉNYEK:
+===========
+
+# Eredmény fájl elérhetõségének útvonala
+score_file: [útvonal]
+
+# Étel értékének a beállítása (Ha a kígyó megeszik egy kaját, akkor hány pontot adjon hozzá a scorehoz)
+score_add: [szám]
+
+
+PÉLDÁK:
+=======
+
+snake_speed: 1000 (Vagyis a kígyó, 1 mp -enként egyet halad elõre, mivel 1000 ms = 1 mp)
+snake_dieOnWall: true (Vagyis amikor a kígyó nekiütközik a falnak, akkor meghal)
+score_file: "myScores.txt" (Lehet relatív és abszolút elérési címet is megadni)
+score_add: 20 (Amikor a kígyó megeszik egy dollárjelet, akkor 20 pont fog hozzáadódni a jelenlegi pontjához)

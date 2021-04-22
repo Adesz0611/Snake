@@ -42,7 +42,6 @@ namespace Snake
                             // Mielőtt még átlépnénk a játékra, elő kell készítenünk a konzolt
                             Console.Clear();
                             game.DrawBorders();
-                            //snake.draw();
                             snake.reset();
                             score.Reset();
                             score.printScoreLabel();

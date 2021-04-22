@@ -10,11 +10,14 @@ namespace Snake
     class Score
     {
         private UInt64 score;
+        private UInt64 savedScore;
+
         public Score() {
             Reset();
         }
         public void Reset() {
             score = 0;
+            savedScore = LoadScore();
         }
 
         public UInt64 GetScore() {
@@ -31,6 +34,7 @@ namespace Snake
             StreamWriter sw = new StreamWriter(f);
 
             sw.Write(Math.Max(GetScore(), currentMax));
+            savedScore = Math.Max(GetScore(), currentMax);
 
             sw.Close();
             f.Close();
@@ -57,9 +61,13 @@ namespace Snake
             Console.Write("Jelenlegi pontszám: ");
         }
 
+        private string checkIfRecord() {
+            return (savedScore < score) ? " [Új Rekord]" : "";
+        }
+
         public void printScore() {
             Console.SetCursorPosition(21, 33);
-            Console.Write(score);
+            Console.Write(score + checkIfRecord());
         }
     }
 }

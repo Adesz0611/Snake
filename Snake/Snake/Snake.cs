@@ -15,7 +15,6 @@ namespace Snake
             public int x, y;
         }
         private pos last;
-        private int score;
 
         private enum Direction {
             UP,
@@ -44,13 +43,7 @@ namespace Snake
             snake.Clear();
             snake.Add(makePos(9, 3));
             snake.Add(makePos(8, 3));
-            /*snake.Add(makePos(7, 3));
-            snake.Add(makePos(6, 3));
-            snake.Add(makePos(5, 3));
-            snake.Add(makePos(4, 3));
-            snake.Add(makePos(3, 3));*/
             dir = Direction.RIGHT;
-            score = 0;
         }
 
         public void draw() {
@@ -138,18 +131,6 @@ namespace Snake
             }
             return false;
         }
-
-        /*
-        public void saveScore() {
-            UInt64 currentMax = LoadScore();
-            FileStream f = new FileStream("score.txt", FileMode.Create);
-            StreamWriter sw = new StreamWriter(f);
-
-            sw.Write(Math.Max(GetScore(), currentMax));
-
-            sw.Close();
-            f.Close();
-        }*/
 
         public void eatFood(Food p_f, Score p_s) {
             if (snake[0].x == p_f.food.x && snake[0].y == p_f.food.y) {

@@ -154,7 +154,11 @@ namespace Snake
             if (snake[0].x == p_f.food.x && snake[0].y == p_f.food.y) {
                 score += 10;
                 snake.Add(last);
-                p_f.generateFoodPos();
+                do
+                {
+                    p_f.generateFoodPos();
+                } while (snake.Contains(p_f.food));
+                
             }
         }
     }

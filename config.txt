@@ -4,9 +4,9 @@
 #
 
 # Kígyó beállítások
-snake_speed: 100           # 3000 ms után megy a kígyó egyet
+snake_speed: 100           # 100 ms után megy a kígyó egyet
 snake_dieOnWall: false     # Ha nekimegy a falnak akkor nagyot koppan :D
 
 # Score beállítások
-score_file: score.txt
-score_add: 10
+score_file: score.txt      # Config fájl elérési útvonala
+score_add: 10              # Ennyi pont adódik a scorehoz, miután a kígyó megevett egy dollárt

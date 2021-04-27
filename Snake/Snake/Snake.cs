@@ -114,27 +114,35 @@ namespace Snake
             }
         }
 
-        public bool checkSelfCollide(Score p_s) {
+        public bool checkSelfCollide() {
             for (int i = 1; i < snake.Count; i++) {
                 if (snake[i].x == snake[0].x && snake[i].y == snake[0].y) {
-                    p_s.SaveScore();
                     return true;
                 }
             }
             return false;
         }
 
-        public bool checkWallCollide(Score p_s) {
+        public bool checkWallCollide(bool p_dieOnWall) {
             if (snake[0].x > 117 || snake[0].x < 2 || snake[0].y < 1 || snake[0].y > 30) {
-                p_s.SaveScore();
-                return true;
+                if (p_dieOnWall)
+                    return true;
+                if (snake[0].x > 117)
+                    snake[0] = makePos(2, snake[0].y);
+                else if (snake[0].x < 2)
+                    snake[0] = makePos(117, snake[0].y);
+                else if (snake[0].y < 1)
+                    snake[0] = makePos(snake[0].x, 30);
+                else
+                    snake[0] = makePos(snake[0].x, 2);
             }
+
             return false;
         }
 
         public void eatFood(Food p_f, Score p_s) {
             if (snake[0].x == p_f.food.x && snake[0].y == p_f.food.y) {
-                p_s.AddToScore(10);
+                p_s.AddToScore();
                 snake.Add(last);
                 do
                 {

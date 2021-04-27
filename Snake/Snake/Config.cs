@@ -9,17 +9,37 @@ namespace Snake
 {
     class Config
     {
-        private UInt32 speed; /* Gyorsaság századmásodpercben (ms) */
-        private bool dieOnWall; /* Meghaljon-e a kígyó, hogyha nekiütközik a falnak */
-        private string scoreFile; /* A scoret tartalmazó file elérési útvonala */
-        private int scoreAdd; /* Ennyit adunk hozzá az aktuális scorehoz, ha a kígyó megeszik egy dollárt */
+        // TODO: ha lesz idő fixálni, hogy a config fájl elérhetőségi útja tartalmazhasson whitespace karaktereket
+
+        private UInt32 speed = 100; /* Gyorsaság századmásodpercben (ms) */
+        private bool dieOnWall = true; /* Meghaljon-e a kígyó, hogyha nekiütközik a falnak */
+        private string scoreFile = "score.txt"; /* A scoret tartalmazó file elérési útvonala */
+        private UInt64 scoreAdd = 10; /* Ennyit adunk hozzá az aktuális scorehoz, ha a kígyó megeszik egy dollárt */
         private UInt32 n; /* Config file hossza sorban */
         private string errorMSG; /* Ideiglenes változó, melynek tartalmát kiolvashatjuk a GetError() függvénnyel */
         private List<string[]> rows = new List<string[]>(); /* Nem tudom kifejezni magam xD */ /* TODO: fixelni a commentet */
 
+        /* -------- Getter függvények -------- */
+        // Azért csinálok getter függvényeket, hogy kívülről ne lehessen a változók értékét változtatni, csak olvasni
+        public UInt32 getSpeed() {
+            return speed;
+        }
+        public bool getDieOnWall() {
+            return dieOnWall;
+        }
+        public string getScoreFile() {
+            return scoreFile;
+        }
+        public UInt64 getScoreAdd() {
+            return scoreAdd;
+        }
+
         public Config() {
-            if (!Load())
+            if (!Load()) {
                 Console.WriteLine("Hiba: " + GetError());
+                Console.ReadKey(true);
+                Environment.Exit(1);
+            }
         }
 
         public bool Load() {
@@ -32,12 +52,15 @@ namespace Snake
             FileStream f = new FileStream("config.txt", FileMode.Open);
             StreamReader sr = new StreamReader(f);
 
-            
+
             for (int i = 0; i < n; i++) {
                 string sor = sr.ReadLine();
-                if (sor.Length < 1)
+                if (sor.Length < 1) // Üres sorokat ignoráljuk
                     continue;
-                string[] elements = new string[2] {"",""};
+
+                /* 0. index: beállítás neve
+                   1. index: érték          */
+                string[] elements = new string[2] { "", "" };
                 int which = 0;
                 bool fromComment = false;
                 for (int j = 0; j < sor.Length; j++) {
@@ -49,10 +72,17 @@ namespace Snake
                     }
                     if (sor[j] == ':') {
                         which++;
+                        if (which > 1)
+                            break;
                         continue;
                     }
 
                     elements[which] += sor[j];
+                }
+
+                if (which > 1) {
+                    errorMSG = (i + 1) + ". sor: " + "Érvénytelen elválasztó ':' (Egy sorban csak egy kulcs, érték pár szerepelhet)";
+                    return false;
                 }
 
                 if (elements[0] == "") {
@@ -71,11 +101,12 @@ namespace Snake
                 
                 rows.Add(elements);
                 if (!set(elements, (i + 1)))
-                    Console.WriteLine("Hiba: " + GetError());
+                    return false;
             }
 
             sr.Close();
             f.Close();
+
             return true;
         }
 
@@ -124,8 +155,8 @@ namespace Snake
                     scoreFile = p[1];
                     break;
                 case "score_add":
-                    int tmp_add;
-                    if (!int.TryParse(p[1], out tmp_add)) {
+                    UInt64 tmp_add;
+                    if (!UInt64.TryParse(p[1], out tmp_add)) {
                         errorMSG = p_row + ". sor: Érvénytelen paraméter: " + p[1] + ", " + p[0] + " közelében!";
                         return false;
                     }

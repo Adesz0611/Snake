@@ -11,26 +11,30 @@ namespace Snake
     {
         private UInt64 score;
         private UInt64 savedScore;
+        private string scoreFile;
+        private UInt64 addToScore;
 
-        public Score() {
+        public Score(string p_scoreFile, UInt64 p_addToScore) {
+            scoreFile = p_scoreFile;
+            addToScore = p_addToScore;
             Reset();
         }
         public void Reset() {
             score = 0;
-            savedScore = LoadScore();
+            savedScore = LoadScore(scoreFile);
         }
 
         public UInt64 GetScore() {
             return score;
         }
 
-        public void AddToScore(UInt64 p_score) {
-            score += p_score;
+        public void AddToScore() {
+            score += addToScore;
         }
 
         public void SaveScore() {
-            UInt64 currentMax = LoadScore();
-            FileStream f = new FileStream("score.txt", FileMode.Create);
+            UInt64 currentMax = LoadScore(scoreFile);
+            FileStream f = new FileStream(scoreFile, FileMode.Create);
             StreamWriter sw = new StreamWriter(f);
 
             sw.Write(Math.Max(GetScore(), currentMax));
@@ -40,11 +44,11 @@ namespace Snake
             f.Close();
         }
 
-        public static UInt64 LoadScore() {
+        public static UInt64 LoadScore(string p_scoreFile) {
             UInt64 score = 0;
-            if (File.Exists("score.txt"))
+            if (File.Exists(p_scoreFile))
             {
-                FileStream f = new FileStream("score.txt", FileMode.Open);
+                FileStream f = new FileStream(p_scoreFile, FileMode.Open);
                 StreamReader sr = new StreamReader(f);
 
                 score = UInt64.Parse(sr.ReadLine());

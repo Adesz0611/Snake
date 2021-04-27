@@ -30,12 +30,12 @@ namespace Snake
             Snake snake = new Snake();
             Food food = new Food();
             Game game = new Game();
-            Score score = new Score();
             Config config = new Config();
-
-            config.Print();
-            Console.ReadKey(true);
-            Environment.Exit(0);
+            Score score = new Score(
+                config.getScoreFile(),
+                config.getScoreAdd()
+            );
+            
 
             State state = State.MENU;
             menu.DrawLogo();
@@ -62,7 +62,8 @@ namespace Snake
                     score.printScore();
                     snake.input();
                     snake.eatFood(food, score);
-                    if (snake.checkWallCollide(score) || snake.checkSelfCollide(score)) {
+                    if (snake.checkWallCollide(config.getDieOnWall()) || snake.checkSelfCollide()) {
+                        score.SaveScore();
                         Console.Clear();
                         menu.DrawLogo();
                         state = State.MENU;
@@ -70,12 +71,12 @@ namespace Snake
                     }
                     snake.draw();
                     
-                    Thread.Sleep(100);
+                    Thread.Sleep((int)config.getSpeed());
                 }
                 while (state == State.RESULT) {
                     Console.Clear();
                     Console.SetCursorPosition(2, 2);
-                    Console.WriteLine("A legnagyobb elért pontszám: " + LoadScore());
+                    Console.WriteLine("A legnagyobb elért pontszám: " + LoadScore(config.getScoreFile()));
                     Console.SetCursorPosition(2, 5);
                     Console.WriteLine("Nyomjon meg egy gombot a menübe való visszalépéshez...");
                     Console.ReadKey();
